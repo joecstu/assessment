@@ -1,12 +1,14 @@
 package com.kbtg.bootcamp.posttest.user;
 
 
+import com.kbtg.bootcamp.posttest.exception.NotFoundException;
 import com.kbtg.bootcamp.posttest.userticket.UserTicket;
 import com.kbtg.bootcamp.posttest.userticket.UserTicketRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -31,6 +33,20 @@ public class UserService {
 
         userTicketRepository.flush();
         return userTicket;
+    }
+
+    public void validateTransactionUser(String userId, String ticketId) {
+        List<UserTicket> userTicketList = userTicketRepository.findByUserIdAndTicketIdAndStatusId(userId,ticketId, "1");
+
+        if(userTicketList.isEmpty()){
+            throw new NotFoundException("TransactionUser is not found");
+        }
+    }
+
+    public void voidTransactionUser(String userId, String ticketId) {
+        int rowUpdated = userTicketRepository.updateStatusId(userId,ticketId, "1","2");
+        System.out.println("voidTransactionUser rowUpdated : "+String.valueOf(rowUpdated));
+
     }
 
 }
