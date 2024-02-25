@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,6 +21,15 @@ public class UserController {
     public UserController(UserService userService,LotteryService lotteryService) {
         this.userService = userService;
         this.lotteryService = lotteryService;
+    }
+
+    @GetMapping("/{userId}/lotteries")
+    public UserTicketTransactionResponseDto getTransactionsUser(
+            @PathVariable("userId")
+            @Pattern(regexp = "\\d{10}",message="Invalid Input")
+            String userId) {
+
+        return userService.getTransactionsUser(userId);
     }
 
     @PostMapping("/{userId}/lotteries/{ticketId}")
