@@ -10,7 +10,6 @@ import java.util.Date;
 public class Lottery {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "lt_ticket_id", nullable = false, length = 100)
     private String ticketId;
 
