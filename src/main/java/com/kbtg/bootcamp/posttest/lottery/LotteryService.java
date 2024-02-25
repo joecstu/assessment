@@ -1,9 +1,12 @@
 package com.kbtg.bootcamp.posttest.lottery;
 
 
+import com.kbtg.bootcamp.posttest.admin.AdminRequestDto;
 import com.kbtg.bootcamp.posttest.exception.NotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,10 +28,35 @@ public class LotteryService {
     }
 
     public void findLotteryByTicketId(String ticketId) {
-        Optional<Lottery> lottery= lotteryRepository.findByTicketId(ticketId);
-        if(lottery.isEmpty()){
+        Optional<Lottery> lottery = lotteryRepository.findByTicketId(ticketId);
+        if (lottery.isEmpty()) {
             throw new NotFoundException("Invalid ticketId");
         }
+    }
+
+    public void validateLotteryByTicketId(String ticketId) {
+        Optional<Lottery> lottery = lotteryRepository.findByTicketId(ticketId);
+        if (lottery.isPresent()) {
+            throw new NotFoundException("Invalid ticketId");
+        }
+    }
+
+    @Transactional
+    public void createLottery(AdminRequestDto adminRequestDto) {
+
+        Lottery lottery = new Lottery();
+
+        lottery.setTicketId(adminRequestDto.getTicket());
+        lottery.setPrice(Long.parseLong(adminRequestDto.getPrice()));
+        lottery.setAmount(Long.parseLong(adminRequestDto.getAmount()));
+        lottery.setCreateUser("admin");
+        lottery.setCreateDate(new Date());
+        lottery.setUpdateUser("admin");
+        lottery.setUpdateDate(new Date());
+
+        lotteryRepository.save(lottery);
+
+        lotteryRepository.flush();
     }
 
 }

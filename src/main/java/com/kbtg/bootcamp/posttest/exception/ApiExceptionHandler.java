@@ -2,6 +2,7 @@ package com.kbtg.bootcamp.posttest.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -27,6 +28,12 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler({HandlerMethodValidationException.class})
     public ResponseEntity<ApiErrorResponse> handlerMethodValidationException(Exception e) {
+        ApiErrorResponse errorResponse = new ApiErrorResponse("Invalid input",HttpStatus.BAD_REQUEST, ZonedDateTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<ApiErrorResponse> handlerMethodArgumentNotValidException(Exception e) {
         ApiErrorResponse errorResponse = new ApiErrorResponse("Invalid input",HttpStatus.BAD_REQUEST, ZonedDateTime.now());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
