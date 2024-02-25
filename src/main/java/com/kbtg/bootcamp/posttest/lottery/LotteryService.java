@@ -2,6 +2,7 @@ package com.kbtg.bootcamp.posttest.lottery;
 
 
 import com.kbtg.bootcamp.posttest.admin.AdminRequestDto;
+import com.kbtg.bootcamp.posttest.exception.BadRequestException;
 import com.kbtg.bootcamp.posttest.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class LotteryService {
     public void validateLotteryByTicketId(String ticketId) {
         Optional<Lottery> lottery = lotteryRepository.findByTicketId(ticketId);
         if (lottery.isPresent()) {
-            throw new NotFoundException("Invalid ticketId");
+            throw new BadRequestException("Invalid ticketId");
         }
     }
 
