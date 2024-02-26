@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
     private final LotteryService lotteryService;
 
-    public UserController(UserService userService,LotteryService lotteryService) {
+    public UserController(UserService userService, LotteryService lotteryService) {
         this.userService = userService;
         this.lotteryService = lotteryService;
     }
@@ -26,7 +26,7 @@ public class UserController {
     @GetMapping("/{userId}/lotteries")
     public UserTicketTransactionResponseDto getTransactionsUser(
             @PathVariable("userId")
-            @Pattern(regexp = "\\d{10}",message="Invalid Input")
+            @Pattern(regexp = "\\d{10}", message = "Invalid Input")
             String userId) {
 
         return userService.getTransactionsUser(userId);
@@ -35,14 +35,14 @@ public class UserController {
     @PostMapping("/{userId}/lotteries/{ticketId}")
     public ResponseEntity<Map<String, String>> buyLottery(
             @PathVariable("userId")
-            @Pattern(regexp = "\\d{10}",message="Invalid Input")
-            String userId ,
+            @Pattern(regexp = "\\d{10}", message = "Invalid Input")
+            String userId,
             @PathVariable("ticketId")
-            @Pattern(regexp = "\\d{6}",message="Invalid Input")
+            @Pattern(regexp = "\\d{6}", message = "Invalid Input")
             String ticketId) {
 
         lotteryService.isLotteryByTicketIdExisting(ticketId);
-        UserTicket userTicket = userService.buyLottery(userId,ticketId);
+        UserTicket userTicket = userService.buyLottery(userId, ticketId);
 
         Map<String, String> response = Collections.singletonMap("id", String.valueOf(userTicket.getTransactionId()));
         return ResponseEntity.status(201).body(response);
@@ -51,14 +51,14 @@ public class UserController {
     @DeleteMapping("/{userId}/lotteries/{ticketId}")
     public ResponseEntity<Map<String, String>> voidLottery(
             @PathVariable("userId")
-            @Pattern(regexp = "\\d{10}",message="Invalid Input")
-            String userId ,
+            @Pattern(regexp = "\\d{10}", message = "Invalid Input")
+            String userId,
             @PathVariable("ticketId")
-            @Pattern(regexp = "\\d{6}",message="Invalid Input")
+            @Pattern(regexp = "\\d{6}", message = "Invalid Input")
             String ticketId) {
 
-        userService.validateTransactionUser(userId,ticketId);
-        userService.voidTransactionUser(userId,ticketId);
+        userService.validateTransactionUser(userId, ticketId);
+        userService.voidTransactionUser(userId, ticketId);
 
         Map<String, String> response = Collections.singletonMap("ticket", String.valueOf(ticketId));
         return ResponseEntity.ok(response);

@@ -55,9 +55,7 @@ public class UserTest {
         LotteryService lotteryService = new LotteryService(lotteryRepository);
         UserController userController = new UserController(userService, lotteryService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(userService, userController, lotteryService)
-                .alwaysDo(print())
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(userService, userController, lotteryService).alwaysDo(print()).build();
     }
 
     @Test
@@ -90,10 +88,7 @@ public class UserTest {
         //Mock there are three data in database
         when(userTicketRepository.getUserTicketTransactionByUserIdAndStatusId(anyString(), anyString())).thenReturn(userTicketTransactionList);
 
-        mockMvc.perform(get("/users/" + userId + "/lotteries")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(responseExpect));
+        mockMvc.perform(get("/users/" + userId + "/lotteries").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string(responseExpect));
     }
 
     @Test
@@ -108,10 +103,7 @@ public class UserTest {
         //Mock there is no data in database
         when(userTicketRepository.getUserTicketTransactionByUserIdAndStatusId(anyString(), anyString())).thenReturn(userTicketTransactionList);
 
-        mockMvc.perform(get("/users/" + userId + "/lotteries")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(responseExpect));
+        mockMvc.perform(get("/users/" + userId + "/lotteries").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string(responseExpect));
     }
 
     @Test
@@ -120,9 +112,7 @@ public class UserTest {
         // set userId length 9 but should be 10
         String userId = "010000000";
 
-        mockMvc.perform(get("/users/" + userId + "/lotteries")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400));
+        mockMvc.perform(get("/users/" + userId + "/lotteries").contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(400));
     }
 
     @Test
@@ -145,10 +135,7 @@ public class UserTest {
 
         String responseExpect = "{\"id\":\"0\"}";
 
-        mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andExpect(content().string(responseExpect));
+        mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated()).andExpect(content().string(responseExpect));
     }
 
     @Test
@@ -163,8 +150,7 @@ public class UserTest {
         String errorExpect = "Request processing failed: com.kbtg.bootcamp.posttest.exception.NotFoundException: Invalid ticketId";
 
         try {
-            mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId)
-                    .contentType(MediaType.APPLICATION_JSON));
+            mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON));
         } catch (Exception e) {
             assertEquals(errorExpect, e.getMessage());
         }
@@ -177,9 +163,7 @@ public class UserTest {
         String userId = "010000000";
         String ticketId = "123456";
 
-        mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400));
+        mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(400));
     }
 
     @Test
@@ -189,9 +173,7 @@ public class UserTest {
         String userId = "0100000001";
         String ticketId = "12345";
 
-        mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400));
+        mockMvc.perform(post("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(400));
     }
 
     @Test
@@ -221,10 +203,7 @@ public class UserTest {
         String responseExpect = "{\"ticket\":\"" + ticketId + "\"}";
 
 
-        mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(responseExpect));
+        mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andExpect(content().string(responseExpect));
     }
 
 
@@ -242,8 +221,7 @@ public class UserTest {
 
         String errorExpect = "Request processing failed: com.kbtg.bootcamp.posttest.exception.NotFoundException: TransactionUser is not found";
         try {
-            mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId)
-                    .contentType(MediaType.APPLICATION_JSON));
+            mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON));
         } catch (Exception e) {
             assertEquals(errorExpect, e.getMessage());
         }
@@ -257,9 +235,7 @@ public class UserTest {
         String userId = "010000000";
         String ticketId = "123456";
 
-        mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400));
+        mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(400));
     }
 
     @Test
@@ -269,9 +245,7 @@ public class UserTest {
         String userId = "0100000001";
         String ticketId = "12345";
 
-        mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(400));
+        mockMvc.perform(delete("/users/" + userId + "/lotteries/" + ticketId).contentType(MediaType.APPLICATION_JSON)).andExpect(status().is(400));
     }
 
 
