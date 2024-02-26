@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminControllerTest {
+public class AdminTest {
 
     private MockMvc mockMvc;
 
@@ -42,31 +42,34 @@ public class AdminControllerTest {
         LotteryService lotteryService = new LotteryService(lotteryRepository);
         AdminController adminController = new AdminController(lotteryService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(lotteryService,adminController)
+        mockMvc = MockMvcBuilders.standaloneSetup(lotteryService, adminController)
                 .alwaysDo(print())
                 .build();
     }
 
     @Test
-    @DisplayName("admin createLotteryShouldSuccessWhenThereIsNoDataInDatabase")
-    public void createLotteryShouldSuccessWhenThereIsNoDataInDatabase() throws Exception {
+    @DisplayName("admin carCreateLotteryShouldSuccessBecauseThereIsNoDataInDatabase")
+    public void carCreateLotteryShouldSuccessBecauseThereIsNoDataInDatabase() throws Exception {
         String ticketId = "123456";
         String price = "80";
         String amount = "1";
+
+        String bodyRequest = "{\n\t\"ticket\": \"" + ticketId + "\",\n\t\"price\": " + price + ",\n\t\"amount\": " + amount + "\n}";
+        String responseExpect = "{\"ticket\":\"" + ticketId + "\"}";
 
         //Mock there is no data in database
         when(lotteryRepository.findByTicketId(anyString())).thenReturn(Optional.empty());
 
         mockMvc.perform(post("/admin/lotteries")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n\t\"ticket\": \""+ticketId+"\",\n\t\"price\": "+price+",\n\t\"amount\": "+amount+"\n}"))
+                        .content(bodyRequest))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("{\"ticket\":\"" + ticketId + "\"}"));
+                .andExpect(content().string(responseExpect));
     }
 
     @Test
-    @DisplayName("admin conNotCreateLotteryShouldNotSuccessWhenThereIsDataInDatabase")
-    public void conNotCreateLotteryShouldNotSuccessWhenThereIsDataInDatabase() throws Exception {
+    @DisplayName("admin canNotCreateLotteryShouldNotSuccessBecauseThereIsADataInDatabase")
+    public void canNotCreateLotteryShouldNotSuccessBecauseThereIsADataInDatabase() {
         String ticketId = "123456";
         String price = "80";
         String amount = "1";
@@ -80,12 +83,15 @@ public class AdminControllerTest {
         //Mock there is a data in database
         when(lotteryRepository.findByTicketId(anyString())).thenReturn(Optional.of(lottery));
 
-        try{
+        String bodyRequest = "{\n\t\"ticket\": \"" + ticketId + "\",\n\t\"price\": " + price + ",\n\t\"amount\": " + amount + "\n}";
+        String errorExpect = "Request processing failed: com.kbtg.bootcamp.posttest.exception.BadRequestException: Invalid ticketId";
+
+        try {
             mockMvc.perform(post("/admin/lotteries")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\n\t\"ticket\": \""+ticketId+"\",\n\t\"price\": "+price+",\n\t\"amount\": "+amount+"\n}"));
-        }catch (Exception e){
-            assertEquals("Request processing failed: com.kbtg.bootcamp.posttest.exception.BadRequestException: Invalid ticketId", e.getMessage());
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(bodyRequest));
+        } catch (Exception e) {
+            assertEquals(errorExpect, e.getMessage());
         }
     }
 
@@ -97,9 +103,11 @@ public class AdminControllerTest {
         String price = "80";
         String amount = "1";
 
+        String bodyRequest = "{\n\t\"ticket\": \"" + ticketId + "\",\n\t\"price\": " + price + ",\n\t\"amount\": " + amount + "\n}";
+
         mockMvc.perform(post("/admin/lotteries")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n\t\"ticket\": \""+ticketId+"\",\n\t\"price\": "+price+",\n\t\"amount\": "+amount+"\n}"))
+                        .content(bodyRequest))
                 .andExpect(status().is(400));
     }
 
@@ -111,9 +119,11 @@ public class AdminControllerTest {
         String price = "";
         String amount = "1";
 
+        String bodyRequest = "{\n\t\"ticket\": \"" + ticketId + "\",\n\t\"price\": " + price + ",\n\t\"amount\": " + amount + "\n}";
+
         mockMvc.perform(post("/admin/lotteries")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n\t\"ticket\": \""+ticketId+"\",\n\t\"price\": "+price+",\n\t\"amount\": "+amount+"\n}"))
+                        .content(bodyRequest))
                 .andExpect(status().is(400));
     }
 
@@ -125,9 +135,11 @@ public class AdminControllerTest {
         String price = "80";
         String amount = "";
 
+        String bodyRequest = "{\n\t\"ticket\": \"" + ticketId + "\",\n\t\"price\": " + price + ",\n\t\"amount\": " + amount + "\n}";
+
         mockMvc.perform(post("/admin/lotteries")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n\t\"ticket\": \""+ticketId+"\",\n\t\"price\": "+price+",\n\t\"amount\": "+amount+"\n}"))
+                        .content(bodyRequest))
                 .andExpect(status().is(400));
     }
 

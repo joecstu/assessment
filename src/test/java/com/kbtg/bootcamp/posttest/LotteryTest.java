@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class LotteryControllerTest {
+public class LotteryTest {
 
     private MockMvc mockMvc;
 
@@ -41,7 +41,7 @@ public class LotteryControllerTest {
         LotteryService lotteryService = new LotteryService(lotteryRepository);
         LotteryController lotteryController = new LotteryController(lotteryService);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(lotteryService,lotteryController)
+        mockMvc = MockMvcBuilders.standaloneSetup(lotteryService, lotteryController)
                 .alwaysDo(print())
                 .build();
     }
@@ -62,32 +62,36 @@ public class LotteryControllerTest {
         lottery3.setTicketId(stringLoterry3);
 
 
-        List <Lottery> lotteryList = new ArrayList<>();
+        List<Lottery> lotteryList = new ArrayList<>();
         lotteryList.add(lottery1);
         lotteryList.add(lottery2);
         lotteryList.add(lottery3);
 
-        //Mock there are three data's in database
+        //Mock there are three data in database
         when(lotteryRepository.findAll()).thenReturn(lotteryList);
+
+        String responseExpect = "{\"tickets\":[\"" + stringLoterry1 + "\",\"" + stringLoterry2 + "\",\"" + stringLoterry3 + "\"]}";
 
         mockMvc.perform(get("/lotteries")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"tickets\":[\""+stringLoterry1+"\",\""+stringLoterry2+"\",\""+stringLoterry3+"\"]}"));
+                .andExpect(content().string(responseExpect));
     }
 
     @Test
     @DisplayName("allUser canGetLotteriesButThereIsNoDataInDatabase")
     public void canGetLotteriesButThereIsNoDataInDatabase() throws Exception {
-        List <Lottery> lotteryList = new ArrayList<>();
+        List<Lottery> lotteryList = new ArrayList<>();
 
         //Mock there is no data in database
         when(lotteryRepository.findAll()).thenReturn(lotteryList);
 
+        String responseExpect = "{\"tickets\":[]}";
+
         mockMvc.perform(get("/lotteries")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string("{\"tickets\":[]}"));
+                .andExpect(content().string(responseExpect));
     }
 
 

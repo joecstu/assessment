@@ -26,7 +26,7 @@ public class AdminController {
 
     @PostMapping("/lotteries")
     public ResponseEntity<Map<String, String>> createLottery(@Valid @RequestBody AdminRequestDto adminRequestDto) {
-        lotteryService.validateLotteryByTicketId(adminRequestDto.getTicket());
+        lotteryService.isLotteryByTicketIdNotExisting(adminRequestDto.getTicket());
         lotteryService.createLottery(adminRequestDto);
 
         Map<String, String> response = Collections.singletonMap("ticket", String.valueOf(adminRequestDto.getTicket()));
