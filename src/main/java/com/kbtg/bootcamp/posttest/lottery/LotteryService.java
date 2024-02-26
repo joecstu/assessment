@@ -35,15 +35,20 @@ public class LotteryService {
         }
     }
 
-    public void validateLotteryByTicketId(String ticketId) {
+    public String validateLotteryByTicketId(String ticketId) {
         Optional<Lottery> lottery = lotteryRepository.findByTicketId(ticketId);
+
+        System.out.println(lottery.isPresent());
+        System.out.println(lottery.isEmpty());
+
         if (lottery.isPresent()) {
             throw new BadRequestException("Invalid ticketId");
         }
+        return ticketId;
     }
 
     @Transactional
-    public void createLottery(AdminRequestDto adminRequestDto) {
+    public String createLottery(AdminRequestDto adminRequestDto) {
 
         Lottery lottery = new Lottery();
 
@@ -58,6 +63,8 @@ public class LotteryService {
         lotteryRepository.save(lottery);
 
         lotteryRepository.flush();
+
+        return adminRequestDto.getTicket();
     }
 
 }
