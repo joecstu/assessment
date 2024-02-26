@@ -7,8 +7,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class PostTestApplication {
 
-	public static void main(String[] args) {
-		ConfigurableApplicationContext ctx = SpringApplication.run(PostTestApplication.class, args);
-	}
+    public static void main(String[] args) {
+        ConfigurableApplicationContext ctx = SpringApplication.run(PostTestApplication.class, args);
+    }
 
 }
