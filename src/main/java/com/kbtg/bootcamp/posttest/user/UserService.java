@@ -33,6 +33,7 @@ public class UserService {
         userTicketRepository.save(userTicket);
 
         userTicketRepository.flush();
+
         return userTicket;
     }
 

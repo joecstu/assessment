@@ -41,8 +41,9 @@ public class UserController {
             @Pattern(regexp = "\\d{6}",message="Invalid Input")
             String ticketId) {
 
-        lotteryService.findLotteryByTicketId(ticketId);
+        lotteryService.isLotteryByTicketIdExisting(ticketId);
         UserTicket userTicket = userService.buyLottery(userId,ticketId);
+
         Map<String, String> response = Collections.singletonMap("id", String.valueOf(userTicket.getTransactionId()));
         return ResponseEntity.status(201).body(response);
     }
@@ -58,6 +59,7 @@ public class UserController {
 
         userService.validateTransactionUser(userId,ticketId);
         userService.voidTransactionUser(userId,ticketId);
+
         Map<String, String> response = Collections.singletonMap("ticket", String.valueOf(ticketId));
         return ResponseEntity.ok(response);
 

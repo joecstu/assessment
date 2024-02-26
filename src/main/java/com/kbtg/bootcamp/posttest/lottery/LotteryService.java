@@ -28,15 +28,21 @@ public class LotteryService {
                 .collect(Collectors.toList());
     }
 
-    public void findLotteryByTicketId(String ticketId) {
+    public void isLotteryByTicketIdExisting(String ticketId) {
         Optional<Lottery> lottery = lotteryRepository.findByTicketId(ticketId);
+
+        //If there is no ticket in Database Should return error
+
         if (lottery.isEmpty()) {
             throw new NotFoundException("Invalid ticketId");
         }
     }
 
-    public void validateLotteryByTicketId(String ticketId) {
+    public void isLotteryByTicketIdNotExisting(String ticketId) {
         Optional<Lottery> lottery = lotteryRepository.findByTicketId(ticketId);
+
+        //If there is a ticket in Database Should return error
+
         if (lottery.isPresent()) {
             throw new BadRequestException("Invalid ticketId");
         }
@@ -58,6 +64,7 @@ public class LotteryService {
         lotteryRepository.save(lottery);
 
         lotteryRepository.flush();
+
     }
 
 }
