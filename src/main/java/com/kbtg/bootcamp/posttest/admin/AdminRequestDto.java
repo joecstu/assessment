@@ -9,15 +9,15 @@ public class AdminRequestDto {
     }
 
     @NotNull
-    @Pattern(regexp = "\\d{6}",message="Invalid Input")
+    @Pattern(regexp = "\\d{6}", message = "Invalid Input")
     private String ticket;
 
     @NotNull
-    @Pattern(regexp = "\\d.*",message="Invalid Input")
+    @Pattern(regexp = "\\d.*", message = "Invalid Input")
     private String price;
 
     @NotNull
-    @Pattern(regexp = "\\d.*",message="Invalid Input")
+    @Pattern(regexp = "\\d.*", message = "Invalid Input")
     private String amount;
 
     public String getTicket() {
