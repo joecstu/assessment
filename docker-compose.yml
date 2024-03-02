@@ -5,16 +5,16 @@ networks:
     driver: bridge
 
 services:
-  # java_backend_app:
-  #   build: .
-  #   ports:
-  #     - "8888:8888"
-  #   depends_on:
-  #     - postgres_db
-  #   networks:
-  #     - mynetwork
-  #   environment:
-  #     - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/lottery
+   java_backend_app:
+     build: .
+     ports:
+      - "8888:8888"
+     depends_on:
+       - postgres_db
+     networks:
+       - mynetwork
+     environment:
+       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/lottery
   postgres_db:
     image: postgres:latest
     environment:
